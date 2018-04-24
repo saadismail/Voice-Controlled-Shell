@@ -3,6 +3,7 @@ import speech_recognition as sr
 import random
 import os
 import time
+import modules
 
 def recognize_speech_from_mic(recognizer, microphone):
     if not isinstance(recognizer, sr.Recognizer):
@@ -41,7 +42,7 @@ def recognize_speech_from_mic(recognizer, microphone):
 
 def speak_to_speaker(text):
     myobj = gTTS(text=text, lang='en', slow=False)
-    myobj.save("welcome.mp3")
+    myobj.save("tts.mp3")
     os.system("mpg321 -q welcome.mp3")
 
 def beep_high():
@@ -54,9 +55,7 @@ if __name__ == "__main__":
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    speak_to_speaker('Hi, Boss')
-    time.sleep(1)
-    speak_to_speaker('How may I help you')
+    speak_to_speaker('Hi, How may I help you')
 
     while (1):
         response = recognize_speech_from_mic(recognizer, microphone)
@@ -79,6 +78,7 @@ if __name__ == "__main__":
 
                 text = str(format(response["transcription"])).lower()
                 print("You said:" + text)
+                modules.runCommand(text)
                 break
 
             beep_low()
