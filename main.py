@@ -40,13 +40,23 @@ def recognize_speech_from_mic(recognizer, microphone):
     return response
 
 def speak_to_speaker(text):
-    myobj = gTTS(text=mytext, lang=language, slow=False)
+    myobj = gTTS(text=text, lang='en', slow=False)
     myobj.save("welcome.mp3")
-    os.system("mpg321 welcome.mp3")
+    os.system("mpg321 -q welcome.mp3")
+
+def beep_high():
+    os.system("mpg321 -q beep_hi.mp3")
+
+def beep_low():
+    os.system("mpg321 -q beep_lo.mp3")
 
 if __name__ == "__main__":
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
+
+    speak_to_speaker('Hi, Boss')
+    time.sleep(1)
+    speak_to_speaker('How may I help you')
 
     while (1):
         response = recognize_speech_from_mic(recognizer, microphone)
@@ -55,9 +65,24 @@ if __name__ == "__main__":
             print("ERROR: {}".format(response["error"]))
             continue;
 
-        text = str(format(response["transcription"]));
+        text = str(format(response["transcription"])).lower()
         print("You said:" + text)
+
+        if ('alexa' in text):
+            beep_high()
+
+            while (1):
+                response = recognize_speech_from_mic(recognizer, microphone)
+                if response["error"]:
+                    print("ERROR: {}".format(response["error"]))
+                    continue
+
+                text = str(format(response["transcription"])).lower()
+                print("You said:" + text)
+                break
+
+            beep_low()
 
         if 'exit' in text:
             print("Good Bye")
-            break;
+            break
