@@ -1,6 +1,6 @@
-import random
 from gtts import gTTS
 import speech_recognition as sr
+import random
 import os
 import time
 
@@ -39,22 +39,25 @@ def recognize_speech_from_mic(recognizer, microphone):
 
     return response
 
+def speak_to_speaker(text):
+    myobj = gTTS(text=mytext, lang=language, slow=False)
+    myobj.save("welcome.mp3")
+    os.system("mpg321 welcome.mp3")
+
 if __name__ == "__main__":
-	recognizer = sr.Recognizer()
-	microphone = sr.Microphone()
+    recognizer = sr.Recognizer()
+    microphone = sr.Microphone()
 
-	tts = gTTS(text='Hello', lang='en', slow=True)
+    while (1):
+        response = recognize_speech_from_mic(recognizer, microphone)
 
-	while (1):
-		response = recognize_speech_from_mic(recognizer, microphone)
+        if response["error"]:
+            print("ERROR: {}".format(response["error"]))
+            continue;
 
-		if response["error"]:
-			print("ERROR: {}".format(response["error"]))
-			continue;
+        text = str(format(response["transcription"]));
+        print("You said:" + text)
 
-		text = str(format(response["transcription"]));
-		print("You said:" + text)
-
-		if 'exit' in text:
-			print("Good Bye")
-			break;
+        if 'exit' in text:
+            print("Good Bye")
+            break;
