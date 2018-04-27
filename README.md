@@ -9,7 +9,7 @@ Voice-Controlled Shell is a python based personal assistant to execute bash comm
  - Python 2.x/3.x
  - Google TTS
  - Speech_Recognition (Google STT)
- -  
+ - PyAudio
 
 ## Installation
 ### For Debian-based systems:
