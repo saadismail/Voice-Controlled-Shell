@@ -43,3 +43,5 @@ This is how a sample coversation goes:
 -   _Assistant_:  _low beep_
 -   _Assistant_:  _speaks the response_
 
+### Valid commands
+You can check the valid commands through this link: [Valid Commands](https://github.com/saadismail/Voice-Controlled-Shell/blob/master/Dictionary.ods)
