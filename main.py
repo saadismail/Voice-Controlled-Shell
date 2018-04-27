@@ -59,7 +59,7 @@ if __name__ == "__main__":
         text = str(format(response["transcription"])).lower()
         print("You said:" + text)
 
-        if ('alexa' in text):
+        if ('hello' in text):
             beep_high()
 
             while (1):
