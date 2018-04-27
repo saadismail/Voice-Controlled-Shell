@@ -4,6 +4,8 @@ import main
 import speech_recognition as sr
 
 def runCommand(text):
+	s = ""
+	ss = ""
 	if "shutdown" in text:
 		os.system("shutdown -h now")
 		main.speak_to_speaker("Shuting Down the PC.")
@@ -64,13 +66,13 @@ def runCommand(text):
 		main.speak_to_speaker("Your have moved to home directory.")
 	
 	elif "go to root directory" in text:
-		s = str(subprocess.check_output(['cd','/']))
-		print(s)
+		os.system("cd /")
+		print("Your have moved to root directory.")
 		main.speak_to_speaker("Your have moved to root directory.")
 	
 	elif "go to my directory" in text:
-		s = str(subprocess.check_output(['cd','~']))
-		print(s)
+		os.system("cd ~")
+		print("Your have moved to your directory.")
 		main.speak_to_speaker("Your have moved to your directory.")
 	
 	elif "what is the day" in text:
@@ -99,12 +101,14 @@ def runCommand(text):
 
 	elif "create a link" in text:
 		main.speak_to_speaker("Tell the file name")
-		res =main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
-		if os.path.exists(res["transcription"]):
+		res=main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
+		name=res["transcription"]
+		if os.path.exists(name):
 			main.speak_to_speaker("What do you want to name the link?")
 			res1 = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
-			ss = str(subprocess.check_output(['ln','-s',res["transcription"],res1["transcription"]]))
-			print(ss)
+			name1 = res1["transcription"]
+			os.system("ls -s "+name+" "+name1)
+			print("Sucessfully created the link.")
 			main.speak_to_speaker("Sucessfully created the link.")			
 		else:
 			main.speak_to_speaker("Unable to find the file.")
@@ -114,12 +118,14 @@ def runCommand(text):
 		main.speak_to_speaker("Tell the file name")
 		res = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
 		print(res["transcription"])
-		if os.path.exists(res["transcription"]):
-			main.speak_to_speaker("Are you sure you want to delete " + res["transcription"] + " ?")
+		name=res["transcription"]
+		if os.path.exists(name):
+			main.speak_to_speaker("Are you sure you want to delete " + name + " ?")
 			res1 = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
-			if "yes" in res1["transcription"]:
-				ss = str(subprocess.check_output(['rm',res["transcription"]]))
-				print(ss)
+			name1 = res1["transcription"]
+			if "yes" in name1:
+				os.system("rm " + name1)
+				print("Sucessfully deleted the file.")
 				main.speak_to_speaker("Sucessfully deleted the file.")
 			else:
 				print("You refused to delete the file.")
@@ -130,13 +136,14 @@ def runCommand(text):
 	
 	elif "create a file" in text:
 		main.speak_to_speaker("Tell the file name")
-		res = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
-		if os.path.exists(res["transcription"]):
-			main.speak_to_speaker(res["transcription"] + " already exsists.")
+		res = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone()) 
+		name = res["transcription"]
+		if os.path.exists(name):
+			main.speak_to_speaker(name + " already exsists.")
 		else:
-			ss = str(subprocess.check_output(['touch',res["transcription"]]))
-			main.speak_to_speaker(res["transcription"] + "file is created.")
-			print(ss)
+			os.system("touch " + name)
+			main.speak_to_speaker(name + "file is created.")
+			print(name + "file is created.")
 
 	elif "just open nano editor" in text:
 		os.system("nano")
@@ -174,9 +181,10 @@ def runCommand(text):
 	elif "tell me the file type" in text:
 		main.speak_to_speaker("Tell the file name")
 		res = main.recognize_speech_from_mic(sr.Recognizer(),sr.Microphone())
-		if os.path.exists(res["transcription"]):
-			ss = str(subprocess.check_output(['file',res["transcription"]]))
-			main.speak_to_speaker(res["transcription"] + "file type is " + ss)
+		name = res["transcription"]
+		if os.path.exists(name):
+			ss = str(subprocess.check_output(['file', name]))
+			main.speak_to_speaker(name + "file type is " + ss)
 			print(ss)
 		else:
 			main.speak_to_speaker("Unable to find the file.")
@@ -276,7 +284,7 @@ def runCommand(text):
 				print("You refused to delete the file.")
 				main.speak_to_speaker("Unable to delete the file.")
 
-	elif "show me who created you" in text:
+	elif "who created you" in text:
 		s = "Following scientists created me:\n1. Saad Ismail\n2. Mehdi Raza Rajani\n3. Hassan Berry."
 		main.speak_to_speaker(s)
 		print(s)
